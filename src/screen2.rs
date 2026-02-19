@@ -1,0 +1,100 @@
+use macroquad::prelude::*;
+use crate::modules::grid::draw_grid;
+use crate::modules::still_image::StillImage;
+use crate::modules::collision::check_collision;
+
+fn draw_grid_standard(grid_size: f32, color: Color) {
+    let screen_width = screen_width();
+    let screen_height = screen_height();
+    
+    // Draw vertical lines and labels
+    for x in (0..screen_width as i32).step_by(grid_size as usize) {
+        draw_line(x as f32, 0.0, x as f32, screen_height, 1.0, color);
+        draw_text(&format!("{}", x), x as f32 + 2.0, 12.0, 16.0, color);
+    }
+    
+    // Draw horizontal lines and labels
+    for y in (0..screen_height as i32).step_by(grid_size as usize) {
+        draw_line(0.0, y as f32, screen_width, y as f32, 1.0, color);
+        draw_text(&format!("{}", y), 2.0, y as f32 + 12.0, 16.0, color);
+    }
+}
+pub async fn run() -> String {
+    
+     let img = StillImage::new(
+    "assets/maze.png",
+    1440.0,  // width
+    1080.0,  // height
+    0.0,  // x position
+    0.0,   // y position
+    true,   // Enable stretching
+    1.0     // Zoom level (1.0 = 100%)
+    ).await;
+    let mut player = StillImage::new(
+    "assets/mario.png",
+    50.0,  // width
+    50.0,  // height
+    50.0,  // x position
+    50.0,   // y position
+    true,   // Enable stretching
+    1.0     // Zoom level (1.0 = 100%)
+    ).await;
+    const MOVE_SPEED: f32 = 200.0;
+    loop {
+        clear_background(WHITE);
+        img.draw();
+        player.draw();
+        let mut move_dir = vec2(0.0, 0.0);
+
+    // Keyboard input
+    if is_key_down(KeyCode::Right) {
+        move_dir.x += 1.0;
+    }
+    if is_key_down(KeyCode::Left) {
+        move_dir.x -= 1.0;
+    }
+    if is_key_down(KeyCode::Down) {
+        move_dir.y += 1.0;
+    }
+    if is_key_down(KeyCode::Up) {
+        move_dir.y -= 1.0;
+    }
+
+    // Normalize the movement to prevent faster diagonal movement
+    if move_dir.length() > 0.0 {
+        move_dir = move_dir.normalize();
+    }
+
+    // Apply movement based on frame time
+    let movement = move_dir * MOVE_SPEED * get_frame_time();
+
+    // Save old position in case of collision
+    let old_pos = player.pos();
+
+    // Move X first
+    if movement.x != 0.0 {
+        player.set_x(player.get_x() + movement.x);
+        if check_collision(&img, &player, 1) {
+            player.set_x(old_pos.x); // Undo if collision happens
+            println!("Collision detected on X axis!");
+        }
+
+    }
+
+    // Move Y next
+    if movement.y != 0.0 {
+        player.set_y(player.get_y() + movement.y);
+        if check_collision(&img, &player, 1)  {
+            player.set_y(old_pos.y); // Undo if collision happens
+        }
+    }
+        draw_text("Screen 2", 20.0, 40.0, 30.0, WHITE);
+
+        if is_key_pressed(KeyCode::Space) {
+            return "screen1".to_string();
+        }
+        draw_grid(50.0, BLACK);
+        next_frame().await;
+        
+    }
+}
