@@ -17,3 +17,4 @@ pub mod still_image;
 pub mod text_button;
 pub mod grid;
 pub mod collision;
+pub mod label;
