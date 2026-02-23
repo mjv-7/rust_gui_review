@@ -32,10 +32,8 @@ pub async fn run() -> String {
     loop {
         clear_background(BLUE);
         draw_text("Screen 1", 20.0, 40.0, 30.0, WHITE);
-        if btn_text.click() {
-            println!("Button was clicked!");
-        }
-        if is_key_pressed(KeyCode::Space) {
+    
+        if btn_text.click() || is_key_down(KeyCode::Enter) {
             return "screen2".to_string();
         }
         draw_grid(50.0, BLACK);
