@@ -18,3 +18,4 @@ pub mod text_button;
 pub mod grid;
 pub mod collision;
 pub mod label;
+pub mod player;

@@ -44,26 +44,7 @@ pub async fn run() -> String {
         clear_background(WHITE);
         img.draw();
         player.draw();
-        let mut move_dir = vec2(0.0, 0.0);
 
-    // Keyboard input
-    if is_key_down(KeyCode::D) {
-        move_dir.x += 1.0;
-    }
-    if is_key_down(KeyCode::A) {
-        move_dir.x -= 1.0;
-    }
-    if is_key_down(KeyCode::S) {
-        move_dir.y += 1.0;
-    }
-    if is_key_down(KeyCode::W) {
-        move_dir.y -= 1.0;
-    }
-
-    // Normalize the movement to prevent faster diagonal movement
-    if move_dir.length() > 0.0 {
-        move_dir = move_dir.normalize();
-    }
 
     // Apply movement based on frame time
     let movement = move_dir * MOVE_SPEED * get_frame_time();
@@ -71,30 +52,30 @@ pub async fn run() -> String {
     // Save old position in case of collision
     let old_pos = player.pos();
 
-    // // Move X first
-    // if movement.x != 0.0 {
-    //     player.set_x(player.get_x() + movement.x);
-    //     if check_collision(&img, &player, 1) {
-    //         player.set_x(old_pos.x); // Undo if collision happens
-    //         println!("Collision detected on X axis!");
-    //     }
+    // Move X first
+    if movement.x != 0.0 {
+        player.set_x(player.get_x() + movement.x);
+        if check_collision(&img, &player, 1) {
+            player.set_x(old_pos.x); // Undo if collision happens
+            println!("Collision detected on X axis!");
+        }
 
-    // }
+    }
 
-    // // Move Y next
-    // if movement.y != 0.0 {
-    //     player.set_y(player.get_y() + movement.y);
-    //     if check_collision(&img, &player, 1)  {
-    //         player.set_y(old_pos.y); // Undo if collision happens
-    //     }
-    // }
-    //     draw_text("Screen 2", 20.0, 40.0, 30.0, WHITE);
+    // Move Y next
+    if movement.y != 0.0 {
+        player.set_y(player.get_y() + movement.y);
+        if check_collision(&img, &player, 1)  {
+            player.set_y(old_pos.y); // Undo if collision happens
+        }
+    }
+        draw_text("Screen 2", 20.0, 40.0, 30.0, WHITE);
 
-    //     if is_key_pressed(KeyCode::Space) {
-    //         return "screen1".to_string();
-    //     }
-    //     draw_grid(50.0, BLACK);
-    //     next_frame().await;
+        if is_key_pressed(KeyCode::Space) {
+            return "screen1".to_string();
+        }
+        draw_grid(50.0, BLACK);
+        next_frame().await;
         
     }
 }
