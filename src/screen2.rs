@@ -39,17 +39,12 @@ pub async fn run() -> String {
     true,   // Enable stretching
     1.0     // Zoom level (1.0 = 100%)
     ).await;
-    const MOVE_SPEED: f32 = 200.0;
     loop {
         clear_background(WHITE);
         img.draw();
         player.draw();
-
-
-    // Apply movement based on frame time
-    let movement = move_dir * MOVE_SPEED * get_frame_time();
-
-    // Save old position in case of collision
+        
+        // Save old position in case of collision
     let old_pos = player.pos();
 
     // Move X first
