@@ -39,31 +39,14 @@ pub async fn run() -> String {
     true,   // Enable stretching
     1.0     // Zoom level (1.0 = 100%)
     ).await;
+
     loop {
         clear_background(WHITE);
         img.draw();
         player.draw();
         
         // Save old position in case of collision
-    let old_pos = player.pos();
 
-    // Move X first
-    if movement.x != 0.0 {
-        player.set_x(player.get_x() + movement.x);
-        if check_collision(&img, &player, 1) {
-            player.set_x(old_pos.x); // Undo if collision happens
-            println!("Collision detected on X axis!");
-        }
-
-    }
-
-    // Move Y next
-    if movement.y != 0.0 {
-        player.set_y(player.get_y() + movement.y);
-        if check_collision(&img, &player, 1)  {
-            player.set_y(old_pos.y); // Undo if collision happens
-        }
-    }
         draw_text("Screen 2", 20.0, 40.0, 30.0, WHITE);
 
         if is_key_pressed(KeyCode::Space) {

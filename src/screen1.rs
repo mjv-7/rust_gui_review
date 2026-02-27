@@ -1,6 +1,6 @@
 use macroquad::prelude::*;
 use crate::modules::text_button::TextButton;
-use crate::modules::grid::{self, draw_grid};
+use crate::modules::grid::{draw_grid};
 use crate::modules::label::Label;
 
 

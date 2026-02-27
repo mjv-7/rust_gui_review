@@ -1,10 +1,11 @@
 use::macroquad::prelude::*;
 use crate::modules::still_image::StillImage;
+use crate::modules::collision::check_collision;
 pub struct Player {
     view: StillImage,
     move_speed: f32,
-    //movement: Vec2
-
+    movement: Vec2,
+    old_pos: Vec2
 }
 
 impl Player {
@@ -14,15 +15,15 @@ impl Player {
         x: f32, 
         y: f32,
         width: f32,
-        height: f32
-    /*movement: Vec2*/) -> Self{
+        height: f32) -> Self{
         Player {
             view:StillImage::new(&asset_path, 50.0, 50.0, x, y, true, 1.0).await,
-            move_speed: 3.0
-        
+            move_speed: 3.0,
+            movement: vec2(0.0, 0.0),
+            old_pos: vec2(0.0, 0.0)
         }
     }
-    pub fn key_press(&mut self) -> &Self{
+    pub fn key_press(&mut self) {
                 let mut move_dir = vec2(0.0, 0.0);
 
     // Keyboard input
@@ -44,30 +45,50 @@ impl Player {
         move_dir = move_dir.normalize();
     }
       // Apply movement based on frame time
-    let movement = move_dir * self.move_speed * get_frame_time();
-    self
-    }
-    pub fn get_pos(&mut self, x: f32, y:f32) -> &Self {
-        self.view.set_x(x);
-        self.view.set_y(y);
-        self
+    self.movement = move_dir * self.move_speed * get_frame_time();
+    self.old_pos = self.position();
     }
     pub fn position(&self) -> Vec2 {
         vec2(self.view.get_x(), self.view.get_y())
     }
-    pub fn get_x(&self, x: f32) {
-        self.x
+    pub fn get_x(&self) ->f32{
+        self.view.get_x()
     }
-    pub fn get_y(){
-        
+    pub fn get_y(&self) ->f32{
+        self.view.get_y()
     }
-    pub fn set_x(){
-        
+    pub fn set_x(&mut self, x: f32){
+        self.view.set_x(x);
     }
-    pub fn set_y(){
-        
+    pub fn set_y(&mut self, y: f32){
+        self.view.set_y(y);
+    }
+    pub fn set_position(&mut self, x: f32, y: f32){
+        self.set_x(x);
+        self.set_y(y);
     }   
     pub fn draw(&mut self){
         self.view.draw();
+    }
+    
+    pub fn collision_x(&mut self, img_out: StillImage){ {
+        if self.movement.x != 0.0 {
+        self.set_x(self.get_x() + self.movement.x);
+        if check_collision(&img_out, &self.view, 1) {
+            self.set_x(self.old_pos.x); // Undo if collision happens
+            println!("Collision detected on X axis!");
+            }
+        }
+    }
+    }
+    pub fn collision_y(&mut self, img_out: StillImage){ {
+        if self.movement.y != 0.0 {
+        self.set_y(self.get_y() + self.movement.y);
+        if check_collision(&img_out, &self.view, 1) {
+            self.set_y(self.old_pos.y); // Undo if collision happens
+            println!("Collision detected on Y axis!");
+            }
+        }
+    }
     }
 }
