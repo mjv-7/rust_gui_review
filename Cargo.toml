@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-macroquad = "0.4.14"
+macroquad = "0.4.13"
 # Conditionally include Rayon only for native platforms (not WebAssembly)
 rayon = { version = "1.7", optional = true }
 

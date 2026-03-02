@@ -1,7 +1,7 @@
 use macroquad::prelude::*;
 use crate::modules::grid::draw_grid;
 use crate::modules::still_image::StillImage;
-use crate::modules::collision::check_collision;
+use crate::modules::player::{self, Player};
 
 fn draw_grid_standard(grid_size: f32, color: Color) {
     let screen_width = screen_width();
@@ -30,14 +30,13 @@ pub async fn run() -> String {
     true,   // Enable stretching
     1.0     // Zoom level (1.0 = 100%)
     ).await;
-    let mut player = StillImage::new(
-    "assets/mario.png",
-    50.0,  // width
-    50.0,  // height
-    50.0,  // x position
-    50.0,   // y position
-    true,   // Enable stretching
-    1.0     // Zoom level (1.0 = 100%)
+    let mut player = player::Player::new(
+        "assets/mario.png".to_string(),
+        1.0,
+        50.0,
+        50.0,
+        50.0,
+        50.0
     ).await;
 
     loop {
@@ -52,6 +51,7 @@ pub async fn run() -> String {
         if is_key_pressed(KeyCode::Space) {
             return "screen1".to_string();
         }
+        
         draw_grid(50.0, BLACK);
         next_frame().await;
         

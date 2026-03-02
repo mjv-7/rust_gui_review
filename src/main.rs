@@ -1,7 +1,7 @@
 /*
-By: <Your Name Here>
+By: Mujibullah
 Date: 2026-02-11
-Program Details: <Program Description Here>
+Program Details: A simple maze game with keys to collect that can help you to open a door, and there is a wall that moves automatically.
 */
 
 mod modules;

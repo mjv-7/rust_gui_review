@@ -18,13 +18,13 @@ impl Player {
         height: f32) -> Self{
         Player {
             view:StillImage::new(&asset_path, 50.0, 50.0, x, y, true, 1.0).await,
-            move_speed: 3.0,
+            move_speed: move_speed,
             movement: vec2(0.0, 0.0),
             old_pos: vec2(0.0, 0.0)
         }
     }
     pub fn key_press(&mut self) {
-                let mut move_dir = vec2(0.0, 0.0);
+        let mut move_dir = vec2(0.0, 0.0);
 
     // Keyboard input
     if is_key_down(KeyCode::D) {
