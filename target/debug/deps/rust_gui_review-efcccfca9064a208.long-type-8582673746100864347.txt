@@ -1,1 +1,0 @@
-for<'a> fn(Vec3, Vec3, Vec3, Vec3, Option<&'a macroquad::texture::Texture2D>, macroquad::color::Color) {macroquad::models::draw_affine_parallelepiped}
